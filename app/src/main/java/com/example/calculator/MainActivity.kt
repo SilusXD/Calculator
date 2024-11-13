@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.rangeTo
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -27,8 +28,10 @@ class MainActivity : AppCompatActivity()
     fun clearResult(view: View)
     {
         val txtViewResult: TextView = findViewById(R.id.txtViewResult)
+        val txtViewExpression: TextView = findViewById(R.id.txtViewExpression)
 
         txtViewResult.text = "0"
+        txtViewExpression.text = ""
     }
 
     fun eraseChar(view: View)
@@ -122,25 +125,138 @@ class MainActivity : AppCompatActivity()
     {
         val txtViewResult: TextView = findViewById(R.id.txtViewResult)
 
-        if(!txtViewResult.text.contains('.'))
+        if("+-x/.".contains(txtViewResult.text.last()))
         {
-            txtViewResult.text = txtViewResult.text.toString() + '.'
+            return
         }
+
+        if(txtViewResult.text.contains('+') || txtViewResult.text.contains('-') ||
+            txtViewResult.text.contains('x') || txtViewResult.text.contains('/'))
+        {
+            for (i in txtViewResult.length() - 1 downTo 0) {
+                if ("+-x/".contains(txtViewResult.text[i])) {
+                    val tempString: String = txtViewResult.text.substring(i+1)
+                    if (tempString.contains('.')) {
+                        return
+                    }
+                    break
+                }
+            }
+        }
+        else if (txtViewResult.text.contains('.'))
+        {
+            return
+        }
+
+        txtViewResult.text = txtViewResult.text.toString() + '.'
     }
 
     fun changeSign(view: View)
     {
         val txtViewResult: TextView = findViewById(R.id.txtViewResult)
-
-        val num: Any
-
-        if(txtViewResult.text.contains('.'))
+        if(txtViewResult.text.contains('+') || txtViewResult.text.contains('x') ||
+            txtViewResult.text.contains('/'))
         {
-            txtViewResult.text = (txtViewResult.text.toString().toDouble() * -1).toString()
+            return
+        }
+
+
+        val countOfMinus: Int = txtViewResult.text.count{ it == '-'}
+        if(countOfMinus > 1 || countOfMinus > 0 && txtViewResult.text[0] != '-' )
+        {
+            return
+        }
+
+        txtViewResult.text = (txtViewResult.text.toString().toDouble() * -1).toString()
+    }
+
+    fun insertOperator(view: View)
+    {
+        val txtViewResult: TextView = findViewById(R.id.txtViewResult)
+        val btnOperator: TextView = findViewById(view.id)
+
+        if("/x+-.".contains(txtViewResult.text.last()))
+        {
+            txtViewResult.text = txtViewResult.text.substring(0,txtViewResult.length()-1) +
+                    btnOperator.text
         }
         else
         {
-            txtViewResult.text = (txtViewResult.text.toString().toInt() * -1).toString()
+            txtViewResult.text = txtViewResult.text.toString() + btnOperator.text
         }
+    }
+
+    fun insertDivOperator(view: View)
+    {
+        insertOperator(view)
+    }
+
+    fun insertMultOperator(view: View)
+    {
+        insertOperator(view)
+    }
+
+    fun insertPlusOperator(view: View)
+    {
+        insertOperator(view)
+    }
+
+    fun insertMinusOperator(view: View)
+    {
+        insertOperator(view)
+    }
+
+    fun calculateResult(view: View)
+    {
+        val txtViewResult: TextView = findViewById(R.id.txtViewResult)
+        val txtViewExpression: TextView = findViewById(R.id.txtViewExpression)
+
+        var result: Double = 0.0
+        var tempNum1: StringBuilder = StringBuilder()
+        var tempOperator: Char = ' '
+
+        if(!("+-x/".contains(txtViewResult.text.last())))
+        {
+            txtViewResult.text = txtViewResult.text.toString() + '+'
+        }
+
+        for (i in 0..<txtViewResult.length())
+        {
+            if(i == 0 && txtViewResult.text[i] == '-')
+            {
+                tempNum1.append(txtViewResult.text[i])
+            }
+            else if("/x+-".contains(txtViewResult.text[i]))
+            {
+                val num: Double = tempNum1.toString().toDouble()
+
+                if(tempOperator == '+' || tempOperator == ' ')
+                {
+                    result += num
+                }
+                else if(tempOperator == '-')
+                {
+                    result -= num
+                }
+                else if(tempOperator == 'x')
+                {
+                    result *= num
+                }
+                else if(tempOperator == '/')
+                {
+                    result /= num
+                }
+                tempOperator = txtViewResult.text[i]
+                tempNum1.clear()
+            }
+            else
+            {
+                tempNum1.append(txtViewResult.text[i])
+            }
+        }
+
+
+        txtViewExpression.text = txtViewResult.text.dropLast(1)
+        txtViewResult.text = result.toString()
     }
 }

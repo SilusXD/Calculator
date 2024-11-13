@@ -7,6 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <TextView
+        android:id="@+id/txtViewExpression"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:textAlignment="textEnd"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/txtViewResult"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/txtViewResult"
         android:text="0"
@@ -20,6 +34,8 @@
         android:layout_marginStart="16dp"
         android:textAlignment="textEnd"
         android:textSize="34sp" />
+
+
 
     <Button
         android:id="@+id/btnAC"
@@ -45,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent" />
     <Button
         android:id="@+id/btnErase"
-        android:text="Erase"
+        android:text="@string/erase"
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_marginBottom="336dp"
@@ -60,6 +76,7 @@
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_marginBottom="336dp"
+        android:onClick="insertDivOperator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -192,10 +209,11 @@
 
     <Button
         android:id="@+id/btnMult"
-        android:text="X"
+        android:text="x"
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_marginBottom="256dp"
+        android:onClick="insertMultOperator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -206,6 +224,7 @@
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_marginBottom="176dp"
+        android:onClick="insertMinusOperator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -216,6 +235,7 @@
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_marginBottom="96dp"
+        android:onClick="insertPlusOperator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -226,6 +246,7 @@
         android:layout_width="85dp"
         android:layout_height="75dp"
         android:layout_marginBottom="16dp"
+        android:onClick="calculateResult"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
